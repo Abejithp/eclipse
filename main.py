@@ -1,20 +1,23 @@
 import pygame
+from os.path import join
 from Player import Player
 from Objects import Ground
 
 pygame.init()
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 1920, 1000
+SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
 FPS = 60 
 VELOCITY = 5
 
 pygame.display.set_caption("Blossom")
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-def draw(screen: pygame.Surface, player: Player, ground: Ground):
+def draw(screen: pygame.Surface, player: Player, background: list, image: pygame.Surface):
+
+    for tile in background:
+        screen.blit(image, tile)
 
     player.draw(screen)
-    ground.draw(screen)
     pygame.display.update()
 
 def handle_move(player: Player):
@@ -28,10 +31,25 @@ def handle_move(player: Player):
         player.move_right(VELOCITY)
 
 
+
+def get_background(name):
+    image = pygame.image.load(join("assets", "Background", name))
+    _, _, width, height = image.get_rect()
+    tiles = []
+    
+    for x in range(0, SCREEN_WIDTH, width):
+        for y in range(0, SCREEN_HEIGHT, height):
+            tiles.append((x, y))
+
+    return tiles, image
+
 def main(screen: pygame.Surface):
     clock = pygame.time.Clock()
     player = Player()
-    ground = Ground(0, 800, 1920, 20)
+    ground = Ground(0, 850, 1600, 20)
+    
+    background, image = get_background("test.png")
+
     run=True
 
     while run:
@@ -48,7 +66,7 @@ def main(screen: pygame.Surface):
 
         player.update(FPS, ground)
         handle_move(player)
-        draw(screen, player, ground)
+        draw(screen, player, background, image)
         
     pygame.quit()
     quit()
