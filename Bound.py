@@ -11,3 +11,4 @@ class Boundaries:
     def collide(self, rect):
         return self.rect.colliderect(rect)
 
+

@@ -1,12 +1,10 @@
 import pygame
-from Objects import Boundaries
-
-
-
+from Bound import Boundaries
+from Collectibles import Bomb
 class Player:
     GRAVITY = 1
     def __init__(self):
-        self.health = 100
+        self.health = 1000
         self.rect = pygame.Rect((300, 250, 150, 300))
         self.x_vel = 0
         self.y_vel = 0
@@ -14,6 +12,8 @@ class Player:
 
         self.fall_count = 0
         self.jump_count = 0
+
+        self.collected_damage = 0
 
 
     def move(self, dx, dy):
@@ -32,9 +32,17 @@ class Player:
         if self.jump_count == 1:
             self.fall_count = 0
         
+    def draw_health(self, screen: pygame.Surface):
+        pygame.draw.rect(screen, (255,0,0), (0, 0, 1000, 20))
+        pygame.draw.rect(screen, (0,255,0), (0, 0, self.health, 20))
 
+    def collect_damage(self, damage):
+        self.collected_damage += damage
     
-    def update(self, fps, ground: Boundaries, left_wall: Boundaries, right_wall: Boundaries):
+    def take_damage(self, damage):
+        self.health -= damage
+    
+    def update(self, fps, ground: Boundaries, left_wall: Boundaries, right_wall: Boundaries, bomb: Bomb):
         self.move(self.x_vel, self.y_vel)
         self.y_vel += min(1, (self.fall_count / fps) * self.GRAVITY)
         self.fall_count += 1
@@ -53,6 +61,14 @@ class Player:
             self.rect.x = right_wall.rect.x - self.rect.width
             self.x_vel = 0
         
+        if bomb.active and bomb.collide(self.rect):
+            self.collect_damage(bomb.damage)
+            bomb.remove()
+        if self.collected_damage > 0:
+            self.health -= 2
+            self.collected_damage -= 2
 
     def draw(self, screen: pygame.Surface):
         pygame.draw.rect(screen, (255,0,0), self.rect )
+
+

@@ -1,7 +1,8 @@
 import pygame
 from os.path import join
 from Player import Player
-from Objects import Boundaries
+from Bound import Boundaries
+from Collectibles import Bomb
 
 pygame.init()
 
@@ -15,12 +16,13 @@ pygame.display.set_caption("Blossom")
 pygame.mouse.set_visible(False)
 screen = pygame.display.set_mode((monitor_size.current_w, monitor_size.current_h), pygame.FULLSCREEN)
 
-def draw(screen: pygame.Surface, player: Player, background: list, image: pygame.Surface):
+def draw(screen: pygame.Surface, player: Player, background: list, image: pygame.Surface, bomb: Bomb):
 
-    for tile in background:
-        screen.blit(image, tile)
+    # for tile in background:
+    #     screen.blit(image, tile)
 
     player.draw(screen)
+    bomb.draw(screen)
     pygame.display.update()
 
 def handle_move(player: Player):
@@ -49,6 +51,7 @@ def get_background(name):
 def main(screen: pygame.Surface):
     clock = pygame.time.Clock()
     player = Player()
+    bomb = Bomb(monitor_size.current_w-200, monitor_size.current_h-200, 50, 50)
     ground = Boundaries(0, monitor_size.current_h-100, monitor_size.current_w, 20)
     left_wall = Boundaries(0, 0, 20, monitor_size.current_h)
     right_wall = Boundaries(monitor_size.current_w-20, 0, 20, monitor_size.current_h)
@@ -84,9 +87,10 @@ def main(screen: pygame.Surface):
 
                     
 
-        player.update(FPS, ground, left_wall, right_wall)
+        player.update(FPS, ground, left_wall, right_wall, bomb)
+        player.draw_health(screen)
         handle_move(player)
-        draw(screen, player, background, image)
+        draw(screen, player, background, image, bomb)
         
     pygame.quit()
     quit()
