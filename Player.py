@@ -7,7 +7,7 @@ class Player:
     GRAVITY = 1
     def __init__(self):
         self.health = 100
-        self.rect = pygame.Rect((300, 250, 50, 100))
+        self.rect = pygame.Rect((300, 250, 150, 300))
         self.x_vel = 0
         self.y_vel = 0
         self.mask = None

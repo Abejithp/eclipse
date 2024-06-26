@@ -5,12 +5,15 @@ from Objects import Ground
 
 pygame.init()
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 450
 FPS = 60 
 VELOCITY = 5
 
+monitor_size = pygame.display.Info()
+
 pygame.display.set_caption("Blossom")
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.mouse.set_visible(False)
+screen = pygame.display.set_mode((monitor_size.current_w, monitor_size.current_h), pygame.FULLSCREEN)
 
 def draw(screen: pygame.Surface, player: Player, background: list, image: pygame.Surface):
 
@@ -46,8 +49,8 @@ def get_background(name):
 def main(screen: pygame.Surface):
     clock = pygame.time.Clock()
     player = Player()
-    ground = Ground(0, 850, 1600, 20)
-    
+    ground = Ground(0, monitor_size.current_h-100, monitor_size.current_w, 20)
+    fullscreen = False
     background, image = get_background("test.png")
 
     run=True
@@ -59,10 +62,24 @@ def main(screen: pygame.Surface):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
+            if event.type == pygame.VIDEORESIZE:
+                if not fullscreen:
+                    width, height = event.dict['size']
+                    screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+    
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and player.jump_count < 2:
+                if event.dict.get('key') == pygame.K_SPACE and player.jump_count < 2:
                     player.jump()
+                if event.dict.get('key') == pygame.K_ESCAPE:
+                    run = False
+                if event.dict.get('key') == pygame.K_LALT:
+                    fullscreen = not fullscreen
+                    if fullscreen:
+                        screen = pygame.display.set_mode((monitor_size.current_w, monitor_size.current_h), pygame.FULLSCREEN)
+                    else:
+                        screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
+
+                    
 
         player.update(FPS, ground)
         handle_move(player)
