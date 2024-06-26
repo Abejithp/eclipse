@@ -1,5 +1,5 @@
 import pygame
-from Objects import Ground
+from Objects import Boundaries
 
 
 
@@ -34,7 +34,7 @@ class Player:
         
 
     
-    def update(self, fps, ground: Ground):
+    def update(self, fps, ground: Boundaries, left_wall: Boundaries, right_wall: Boundaries):
         self.move(self.x_vel, self.y_vel)
         self.y_vel += min(1, (self.fall_count / fps) * self.GRAVITY)
         self.fall_count += 1
@@ -45,6 +45,14 @@ class Player:
             self.y_vel = 0
             self.jump_count = 0
 
+        if left_wall.collide(self.rect):
+            self.rect.x = left_wall.rect.x + left_wall.rect.width
+            self.x_vel = 0
+
+        if right_wall.collide(self.rect):
+            self.rect.x = right_wall.rect.x - self.rect.width
+            self.x_vel = 0
+        
 
     def draw(self, screen: pygame.Surface):
         pygame.draw.rect(screen, (255,0,0), self.rect )

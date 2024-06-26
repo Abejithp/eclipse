@@ -1,13 +1,13 @@
 import pygame
 from os.path import join
 from Player import Player
-from Objects import Ground
+from Objects import Boundaries
 
 pygame.init()
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 450
 FPS = 60 
-VELOCITY = 5
+VELOCITY = 10
 
 monitor_size = pygame.display.Info()
 
@@ -49,7 +49,10 @@ def get_background(name):
 def main(screen: pygame.Surface):
     clock = pygame.time.Clock()
     player = Player()
-    ground = Ground(0, monitor_size.current_h-100, monitor_size.current_w, 20)
+    ground = Boundaries(0, monitor_size.current_h-100, monitor_size.current_w, 20)
+    left_wall = Boundaries(0, 0, 20, monitor_size.current_h)
+    right_wall = Boundaries(monitor_size.current_w-20, 0, 20, monitor_size.current_h)
+
     fullscreen = False
     background, image = get_background("test.png")
 
@@ -81,7 +84,7 @@ def main(screen: pygame.Surface):
 
                     
 
-        player.update(FPS, ground)
+        player.update(FPS, ground, left_wall, right_wall)
         handle_move(player)
         draw(screen, player, background, image)
         

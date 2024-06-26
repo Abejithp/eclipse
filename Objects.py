@@ -1,6 +1,6 @@
 import pygame
 
-class Ground:
+class Boundaries:
     def __init__(self, x, y, width, height):
         self.x = x
         self.y = y
@@ -10,3 +10,4 @@ class Ground:
 
     def collide(self, rect):
         return self.rect.colliderect(rect)
+
