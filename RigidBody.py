@@ -39,8 +39,8 @@ class Character:
 
 
 class Player(Character):
-    def __init__(self):
-        super().__init__(1000, 300, 250, 150, 150)
+    def __init__(self, x, y):
+        super().__init__(1000, x, y, 150, 150)
 
     def draw_health(self, screen: pygame.Surface):
         pygame.draw.rect(screen, (255,0,0), (0, 0, 1000, 20))
@@ -79,7 +79,7 @@ class Player(Character):
                 bomb.remove()
    
     
-    def update(self, fps, collosions: Collosions, bomb: Bomb):
+    def update(self, fps, collosions: Collosions):
         self.move(self.x_vel, self.y_vel)
         self.check_walls(collosions.walls)
         self.check_bombs(collosions.bombs)
@@ -87,28 +87,6 @@ class Player(Character):
         if(self.collected_damage > 0):
             self.health -= 2
             self.collected_damage -= 2
-
-
-        # if ground.collide(self.rect):
-        #     self.rect.y = ground.rect.y - self.rect.height
-        #     self.fall_count = 0
-        #     self.y_vel = 0
-        #     self.jump_count = 0
-
-        # if left_wall.collide(self.rect):
-        #     self.rect.x = left_wall.rect.x + left_wall.rect.width
-        #     self.x_vel = 0
-
-        # if right_wall.collide(self.rect):
-        #     self.rect.x = right_wall.rect.x - self.rect.width
-        #     self.x_vel = 0
-        
-        # if bomb.active and bomb.collide(self.rect):
-        #     self.collect_damage(bomb.damage)
-        #     bomb.remove()
-        # if self.collected_damage > 0:
-        #     self.health -= 2
-        #     self.collected_damage -= 2
 
     def draw(self, screen: pygame.Surface):
         pygame.draw.rect(screen, (255,0,0), self.rect)

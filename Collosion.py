@@ -24,12 +24,12 @@ class Wall:
 
 class Collosions:
     def __init__(self, width, height):
-        
+
         self.walls = {
-            WALLSIDE.TOP: Wall(0, 0, width, 20, WALLSIDE.TOP),
-            WALLSIDE.BOTTOM: Wall(0, height-20, width, 20, WALLSIDE.BOTTOM),
-            WALLSIDE.LEFT: Wall(0, 0, 20, height, WALLSIDE.LEFT),
-            WALLSIDE.RIGHT: Wall(width-20, 0, 20, height, WALLSIDE.RIGHT)
+            WALLSIDE.TOP: Wall(0, 0, width, 1, WALLSIDE.TOP),
+            WALLSIDE.BOTTOM: Wall(0, height-1, width, 1, WALLSIDE.BOTTOM),
+            WALLSIDE.LEFT: Wall(0, 0, 1, height, WALLSIDE.LEFT),
+            WALLSIDE.RIGHT: Wall(width-1, 0, 1, height, WALLSIDE.RIGHT)
         }
 
         self.bombs: List[Bomb] = []
