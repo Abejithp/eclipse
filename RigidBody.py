@@ -5,6 +5,7 @@ from Collosion import Wall, Collosions
 from Collectibles import Bomb
 
 from Collosion import WALLSIDE
+from os.path import join
 
 
 class Direction(Enum):
@@ -15,7 +16,7 @@ class Direction(Enum):
 
 
 class Character:
-    def __init__(self, health, x, y, width, height):
+    def __init__(self, health, x, y, width, height, name):
         self.health = health
         self.rect = pygame.Rect(x, y, width, height)
         self.x_vel = 0
@@ -23,6 +24,7 @@ class Character:
         self.collected_damage = 0
         self.mask = None
         self.direction = Direction.DOWN
+        self.sprite = pygame.image.load(join("assets", "Characters", "Player", name))
 
     def move(self, dx, dy):
         self.x_vel = dx
@@ -39,8 +41,8 @@ class Character:
 
 
 class Player(Character):
-    def __init__(self, x, y):
-        super().__init__(1000, x, y, 150, 150)
+    def __init__(self, x, y, name):
+        super().__init__(1000, x, y, 150, 150, name)
 
     def draw_health(self, screen: pygame.Surface):
         pygame.draw.rect(screen, (255,0,0), (0, 0, 1000, 20))
@@ -89,7 +91,8 @@ class Player(Character):
             self.collected_damage -= 2
 
     def draw(self, screen: pygame.Surface):
-        pygame.draw.rect(screen, (255,0,0), self.rect)
+        screen.blit(self.sprite, (self.rect.x, self.rect.y))
+        # pygame.draw.rect(screen, (255,0,0), self.rect)
 
 
 

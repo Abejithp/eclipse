@@ -59,14 +59,14 @@ def get_background(name):
 
 def main(screen: pygame.Surface):
     clock = pygame.time.Clock()
-    player = Player(monitor_size.current_w//2, monitor_size.current_h//2)
+    player = Player(10, 10, "player.png")
 
     bomb = Bomb(monitor_size.current_w-200, monitor_size.current_h-200, 50, 50)
 
     collosions = Collosions(monitor_size.current_w, monitor_size.current_h)
     collosions.add_bomb(bomb)
 
-    camera = Camera(monitor_size.current_w, monitor_size.current_h, "background.png", 0, 0)
+    camera = Camera(monitor_size.current_w//2, monitor_size.current_h//2, "background.png", 0, 0)
     camera.get_background()
     fullscreen = False
     background, image = get_background("background.png")

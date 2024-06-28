@@ -29,4 +29,4 @@ class Camera:
         self.posX, self.posY = position
     
         for tile in self.background:
-            screen.blit(self.image, (tile[0] - self.posX*2//3, tile[1] - self.posY*2//3))
+            screen.blit(self.image, (tile[0] - self.posX, tile[1] - self.posY))
