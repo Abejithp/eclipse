@@ -1,6 +1,6 @@
 import sys
 import pygame
-from Scripts.entities import PhysicalEntity
+from scripts.entities import PhysicalEntity
 
 class Game:
     def __init__(self):
