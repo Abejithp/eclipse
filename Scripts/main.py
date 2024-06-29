@@ -7,9 +7,10 @@ from Camera import Camera
 
 pygame.init()
 
+
 SCREEN_WIDTH, SCREEN_HEIGHT = 1920, 1080
 FPS = 60 
-VELOCITY = 10
+VELOCITY = 6
 
 monitor_size = pygame.display.Info()
 
@@ -17,11 +18,9 @@ pygame.display.set_caption("Blossom")
 pygame.mouse.set_visible(False)
 screen = pygame.display.set_mode((monitor_size.current_w, monitor_size.current_h), pygame.FULLSCREEN)
 
-def draw(screen: pygame.Surface, player: Player, background: list, image: pygame.Surface, bomb: Bomb, camera: Camera):
+def draw(screen: pygame.Surface, player: Player, bomb: Bomb, camera: Camera):
 
-    # for tile in background:
-    #     screen.blit(image, tile)
-    screen.fill((25,70,26))
+    screen.fill((25,70,26), (0, 0, monitor_size.current_w, monitor_size.current_h))
     camera.draw(screen, (player.rect.x, player.rect.y))
 
 
@@ -44,32 +43,18 @@ def handle_move(player: Player):
 
 
 
-def get_background(name):
-    image = pygame.image.load(join("assets", "Background", name))
-    _, _, width, height = image.get_rect()
-    tiles = []
-    
-    for x in range(0, SCREEN_WIDTH, width):
-        for y in range(0, SCREEN_HEIGHT, height):
-            tiles.append((x, y))
-
-    return tiles, image
-
-
 
 def main(screen: pygame.Surface):
     clock = pygame.time.Clock()
     player = Player(10, 10, "player.png")
-
+    player.load_sprite()
     bomb = Bomb(monitor_size.current_w-200, monitor_size.current_h-200, 50, 50)
-
     collosions = Collosions(monitor_size.current_w, monitor_size.current_h)
     collosions.add_bomb(bomb)
 
-    camera = Camera(monitor_size.current_w//2, monitor_size.current_h//2, "background.png", 0, 0)
+    camera = Camera(monitor_size.current_w, monitor_size.current_h, "background.png", 0, 0)
     camera.get_background()
     fullscreen = False
-    background, image = get_background("background.png")
 
     run=True
 
@@ -97,7 +82,7 @@ def main(screen: pygame.Surface):
 
         player.update(FPS, collosions)
         handle_move(player)
-        draw(screen, player, background, image, bomb, camera)
+        draw(screen, player, bomb, camera)
         
     pygame.quit()
     quit()

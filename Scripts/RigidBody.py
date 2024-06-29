@@ -14,6 +14,11 @@ class Direction(Enum):
     UP = 3
     DOWN = 4
 
+class PlayerAnimation(Enum):
+    IDLE = 1
+    WALK = 2
+    JUMP = 3
+    ATTACK = 4
 
 class Character:
     def __init__(self, health, x, y, width, height, name):
@@ -24,7 +29,7 @@ class Character:
         self.collected_damage = 0
         self.mask = None
         self.direction = Direction.DOWN
-        self.sprite = pygame.image.load(join("assets", "Characters", "Player", name))
+        self.name = name
 
     def move(self, dx, dy):
         self.x_vel = dx
@@ -42,7 +47,9 @@ class Character:
 
 class Player(Character):
     def __init__(self, x, y, name):
-        super().__init__(1000, x, y, 150, 150, name)
+        super().__init__(1000, x, y, 70, 120, name)
+        self.sprite = []
+        self.animation = 0
 
     def draw_health(self, screen: pygame.Surface):
         pygame.draw.rect(screen, (255,0,0), (0, 0, 1000, 20))
@@ -54,6 +61,12 @@ class Player(Character):
     def take_damage(self, damage):
         self.health -= damage
 
+    def load_sprite(self):
+        sprite_sheet = pygame.image.load(join("assets", "Characters", "Player", self.name)).convert_alpha()
+        scale = 5.5
+        transform = pygame.transform.scale(sprite_sheet, (sprite_sheet.get_width() * scale, sprite_sheet.get_height() * scale))
+        idle = transform.subsurface((100, 120, transform.get_width()/6, transform.get_height()/10 ))
+        self.sprite.append(idle)
 
 
     def check_walls(self, walls: Dict[WALLSIDE, Wall]):
@@ -91,8 +104,8 @@ class Player(Character):
             self.collected_damage -= 2
 
     def draw(self, screen: pygame.Surface):
-        screen.blit(self.sprite, (self.rect.x, self.rect.y))
-        # pygame.draw.rect(screen, (255,0,0), self.rect)
+        screen.blit(self.sprite[0], (self.rect.x, self.rect.y))
+    
 
 
 
