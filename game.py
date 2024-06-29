@@ -4,7 +4,7 @@ from scripts.entities import PhysicalEntity
 
 class Game:
     def __init__(self):
-        scale = 3
+        scale = 4
         pygame.init()
         pygame.display.set_caption("Eclipse")
         self.screen = pygame.display.set_mode((1280,720))
@@ -33,6 +33,13 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+                    if event.key == pygame.K_SPACE:
+                        self.player.attack()
+
             self.handle_input()
 
             self.screen.blit(pygame.transform.scale(self.display, (1280, 720)), (0,0))

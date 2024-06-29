@@ -5,7 +5,7 @@ from scripts.utils import load_image, Animation
 BASE_PATH = 'assets/'
 
 class PhysicalEntity:
-    def __init__(self, position, dimesions, speed=1):
+    def __init__(self, position, dimesions, speed=1.5):
         x, y = position
         width, height = dimesions
         self.rect = pygame.Rect(x, y, width, height)
@@ -21,14 +21,17 @@ class PhysicalEntity:
             'run_down': Animation('Character/Player/run_down', 8, True),
             'run_right': Animation('Character/Player/run_right', 8, True),
             'run_up': Animation('Character/Player/run_up', 8, True),
+            'attack_down': Animation('Character/Player/attack_down', 12, True),
+            'attack_right': Animation('Character/Player/attack_right', 12, True),
+            'attack_up': Animation('Character/Player/attack_up', 12, True),
         }
         self.current_animation = 'idle'
         self.direction = 'down'
+        self.attack_frame = 0
 
 
     def load_image(self, name):
         return pygame.image.load(BASE_PATH + name).convert()
-    
 
     def move(self, x, y):
         self.velocity[0] = x
@@ -52,13 +55,27 @@ class PhysicalEntity:
         else:
             self.current_animation = 'idle'
         
-
+    def attack(self):
+        self.current_animation = 'attack'
+        self.attack_frame = 4
+        pass
 
     def render(self, screen: pygame.Surface):
         animation_frame = self.current_animation + '_' + self.direction
-        screen.blit(self.animations[animation_frame].img(), self.position)
-        self.animations[animation_frame].update()
+
+        if self.attack_frame > 0:
+            if self.flip:
+                screen.blit(pygame.transform.flip(self.animations[animation_frame].img(), True, False), self.position)
+            else:
+                screen.blit(self.animations[animation_frame].img(), self.position)
+            self.animations[animation_frame].update()
+            self.attack_frame -= 1
+            return
+
         if self.flip:
             screen.blit(pygame.transform.flip(self.animations[animation_frame].img(), True, False), self.position)
+        else:
+            screen.blit(self.animations[animation_frame].img(), self.position)
+        self.animations[animation_frame].update()
         self.current_animation = 'idle'
 
